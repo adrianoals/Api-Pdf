@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado da Simulação</title>
+    <link rel="stylesheet" href="/templates/style.css">
+</head>
+<body>
+    <div class="proposta" id="proposta-pdf">
+        
+        <!-- Cópia Aqui-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="secao">
+                    <h2>Dados do Cliente</h2>
+                    <p><strong>Nome:</strong> <span id="cliente-nome">[Nome do Cliente]</span></p>
+                    <p><strong>Email:</strong> <span id="cliente-email">[Email do Cliente]</span></p>
+                    <p><strong>Telefone:</strong> <span id="cliente-telefone">[Telefone do Cliente]</span></p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="secao">
+                    <h2>Dados do Vendedor</h2>
+                    <p><strong>Nome do Vendedor:</strong> <span id="vendedor-nome">[Nome do Vendedor]</span></p>
+                    <p><strong>Email do Vendedor:</strong> <span id="vendedor-email">[Email do vendedor]</span></p>
+                    <p><strong>Telefone do Vendedor:</strong> <span id="vendedor-telefone">[Telefone do do Vendedor]</span></p>
+                </div>
+            </div>
+        </div>
+        <!-- Até Aqui-->
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="secao">
+                    <h2>Simulação</h2>
+                    <p><strong>Valor do Crédito: R$</strong> <span id="valor-credito">[Valor do Crédito]</span></p>
+                    <p><strong>Bem:</strong> <span id="bem-descricao">[Descrição do Bem]</span></p>
+                    <p><strong>Prazo:</strong> <span id="prazo">[Prazo]</span></p>
+                    <p><strong>Valor Parcela: R$</strong> <span id="valor-parcela-com-seguro">[Valor da Parcela]</span></p>
+                    <p><strong>Valor Primeira Parcela Antecipação: R$</strong> <span id="valor-primeira-parcela-antecipacao-com-seguro">[Valor da Primeira Parcela]</span></p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="secao">
+                    <h2>Lance sugerido pelo cliente</h2>
+                    <p><strong>Lance Recurso Próprio: R$</strong> <span id="lance-recurso-proprio">[Lance Recurso Próprio]</span></p>
+                    <p><strong>Lance Terceiro: R$</strong> <span id="lance-terceiro">[Lance Terceiro]</span></p>
+                    <p><strong>Lance Embutido: R$</strong> <span id="lance-embutido">[Lance Embutido]</span></p>
+                    <p><strong>Total Lance: R$</strong> <span id="total-lance">[Total Lance]</span></p>
+                    <p><strong>Percentual Lance:</strong> <span id="percentual-lance">[Percentual Lance]</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="secao">
+                    <h2>Opção 1: Abatimento do lance nas parcelas restantes</h2>
+                    <p><strong>Mês de Contemplação:</strong> <span id="mes-contemplacao-opcao1">[Mês de Contemplação]</span></p>
+                    
+                    <!--<p style="margin-top: 0px;margin-bottom: 2px; color: #e74c3c; font-size: 11px;">(Apenas simulação, mês de contemplação não garantido)</p>-->
+                    
+                    <p><strong>Valor Crédito Entregue: R$</strong> <span id="valor-credito-entregue-opcao1">[Valor Crédito Entregue]</span></p>
+                    <p><strong>Valor Abatido Parcela: R$</strong> <span id="valor-abatido-parcela-opcao1">[Valor Abatido Parcela]</span></p>
+                    <p><strong>Prazo Atualizado:</strong> <span id="prazo-atualizado-opcao1">[Prazo Atualizado]</span></p>
+                    <p><strong>Parcela Atualizada: R$</strong> <span id="parcela-atualizada-com-seguro">[Parcela Atualizada]</span></p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="secao">
+                    <h2>Opção 2: Abatimento do lance no prazo restante</h2>
+                    <p><strong>Mês de Contemplação:</strong> <span id="mes-contemplacao-opcao2">[Mês de Contemplação]</span></p>
+                    
+                    <!--<p style="margin-top: 0px;margin-bottom: 2px; color: #e74c3c; font-size: 11px;">(Apenas simulação, mês de contemplação não garantido)</p>-->
+                    
+                    <p><strong>Valor Crédito Entregue: R$</strong> <span id="valor-credito-entregue-opcao2">[Valor Crédito Entregue]</span></p>
+                    <p><strong>Quantidade de Parcelas Abatidas no Prazo:</strong> <span id="quantidade-parcelas-abatidas-com-seguro">[Quantidade de Parcelas Abatidas]</span></p>
+                    <p><strong>Prazo Atualizado:</strong> <span id="prazo-atualizado-com-seguro">[Prazo Atualizado]</span></p>
+                    <p><strong>Parcela Atualizada: R$</strong> <span id="parcela-atualizada-opcao2-com-seguro">[Parcela Atualizada]</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="secao">
+            <h2>Taxas</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Taxa Administração Total:</strong> <span id="taxa-administracao">[Taxa Administração Total]</span></p>
+                    <p><strong>Taxa Administração Antecipada:</strong> <span id="taxa-antecipacao">[Taxa Administração Antecipada]</span></p>
+                    <p><strong>Fundo de Reserva:</strong> <span id="fundo-reserva">[Fundo de Reserva]</span></p>
+                    <p><strong>Taxa Efetivo Mensal:</strong> <span id="taxa-efetivo-mensal">[Taxa Efetivo Mensal]</span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Custo Efetivo Total: R$</strong> <span id="custo-efetivo-total">[Custo Efetivo Total]</span></p>
+                    <p><strong>Valor Seguro Mensal: R$</strong> <span id="valor-seguro-mensal">[Valor Seguro Mensal]</span></p>
+                    <!--<p><strong>Valor Seguro Total: R$</strong> <span id="valor-seguro-total">[Valor Seguro Total]</span></p>-->
+                    <p><strong>Seguro:</strong> <span id="seguro-vida">[Seguro]</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Cópia Aqui -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="secao">
+                    <h2>Dados da Proposta</h2>
+                    <p><strong>Data e Hora da Proposta:</strong> <span id="datahora-proposta">[Data e Hora da Proposta]</span></p>
+                    <p><strong>Vencimento da Proposta:</strong> <span id="vencimento-proposta">[Vencimento da Proposta]</span></p>
+                </div>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>

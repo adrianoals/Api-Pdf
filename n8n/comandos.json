@@ -1,0 +1,13 @@
+[
+    {
+        "local_password": "Aals1988@@"
+    }
+
+    ,
+    
+    { 
+        "key1": "docker volume create n8n_data",
+        "key2": "docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n start"
+    }
+]
+
