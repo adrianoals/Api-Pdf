@@ -43,3 +43,59 @@ puppeteer_cache/
 # Outros arquivos desnecessários
 .nyc_output/
 coverage/
+# 📌 Node.js dependencies e pacotes de terceiros
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 📌 Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# 📌 Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
+
+# 📌 Arquivos temporários e de cache
+*.tmp
+*.swp
+*.swo
+*.swn
+.nyc_output/
+coverage/
+puppeteer_cache/
+
+# 📌 Configurações do editor de código
+.vscode/
+.idea/
+*.sublime-workspace
+
+# 📌 Saídas do Puppeteer e arquivos de build
+output/
+*.pdf
+dist/
+build/
+
+# 📌 Variáveis de ambiente e credenciais sensíveis
+.env*
+!.env.example # Mantenha um exemplo para referência
+
+# 📌 Ignorar pastas e volumes do Docker
+docker-compose.override.yml
+.dockerignore
+docker-data/
+docker-volumes/
+*.pid
+
+# 📌 Ignorar imagens, containers e cache do Docker
+**/node_modules
+**/vendor
+
+# 📌 Ignorar logs e arquivos temporários
+*.out
+*.err
+/tmp
