@@ -1,0 +1,205 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        -180
+      ],
+      "id": "458af83f-88cb-4eeb-9aab-39a87aec029f",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3000/generate-pdf",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"html\": \"<!DOCTYPE html>\\n<html lang=\\\"pt-br\\\">\\n<head>\\n    <meta charset=\\\"UTF-8\\\">\\n    <meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1.0\\\">\\n    <title>Resultado da Simulação</title>\\n    <link rel=\\\"stylesheet\\\" href=\\\"/templates/style.css\\\">\\n</head>\\n<body>\\n    <div class=\\\"proposta\\\" id=\\\"proposta-pdf\\\">\\n        \\n        <!-- Cópia Aqui-->\\n        <div class=\\\"row\\\">\\n            <div class=\\\"col-md-6\\\">\\n                <div class=\\\"secao\\\">\\n                    <h2>Dados do Cliente</h2>\\n                    <p><strong>Nome:</strong> <span id=\\\"cliente-nome\\\">{{ $json['Nome do Cliente'] }}</span></p>\\n                    <p><strong>Email:</strong> <span id=\\\"cliente-email\\\">{{ $json['Email do Cliente'] }}</span></p>\\n                    <p><strong>Telefone:</strong> <span id=\\\"cliente-telefone\\\">{{ $json['Telefone do Cliente'] }}</span></p>\\n                </div>\\n            </div>\\n            <div class=\\\"col-md-6\\\">\\n                <div class=\\\"secao\\\">\\n                   <h2>Dados do Vendedor</h2>\\n                    <p><strong>Nome do Vendedor:</strong> <span id=\\\"vendedor-nome\\\">[Nome do Vendedor]</span></p>\\n                    <p><strong>Email do Vendedor:</strong> <span id=\\\"vendedor-email\\\">[Email do vendedor]</span></p>\\n                    <p><strong>Telefone do Vendedor:</strong> <span id=\\\"vendedor-telefone\\\">[Telefone do do Vendedor]</span></p>\\n                </div>\\n            </div>\\n        </div>\\n        <!-- Até Aqui-->\\n        \\n        <div class=\\\"row\\\">\\n            <div class=\\\"col-md-6\\\">\\n                <div class=\\\"secao\\\">\\n                    <h2>Simulação</h2>\\n                    <p><strong>Valor do Crédito: R$</strong> <span id=\\\"valor-credito\\\">{{ $json.credito_entregue }}</span></p>\\n                    <p><strong>Bem:</strong> <span id=\\\"bem-descricao\\\">[Descrição do Bem]</span></p>\\n                    <p><strong>Prazo:</strong> <span id=\\\"prazo\\\">[Prazo]</span></p>\\n                    <p><strong>Valor Parcela: R$</strong> <span id=\\\"valor-parcela-com-seguro\\\">[Valor da Parcela]</span></p>\\n                    <p><strong>Valor Primeira Parcela Antecipação: R$</strong> <span id=\\\"valor-primeira-parcela-antecipacao-com-seguro\\\">[Valor da Primeira Parcela]</span></p>\\n                </div>\\n            </div>\\n            <div class=\\\"col-md-6\\\">\\n                <div class=\\\"secao\\\">\\n                    <h2>Lance sugerido pelo cliente</h2>\\n                    <p><strong>Lance Recurso Próprio: R$</strong> <span id=\\\"lance-recurso-proprio\\\">[Lance Recurso Próprio]</span></p>\\n                    <p><strong>Lance Terceiro: R$</strong> <span id=\\\"lance-terceiro\\\">[Lance Terceiro]</span></p>\\n                    <p><strong>Lance Embutido: R$</strong> <span id=\\\"lance-embutido\\\">[Lance Embutido]</span></p>\\n                    <p><strong>Total Lance: R$</strong> <span id=\\\"total-lance\\\">[Total Lance]</span></p>\\n                    <p><strong>Percentual Lance:</strong> <span id=\\\"percentual-lance\\\">[Percentual Lance]</span></p>\\n                </div>\\n            </div>\\n        </div>\\n\\n        <div class=\\\"row\\\">\\n            <div class=\\\"col-md-6\\\">\\n                <div class=\\\"secao\\\">\\n                    <h2>Opção 1: Abatimento do lance nas parcelas restantes</h2>\\n                    <p><strong>Mês de Contemplação:</strong> <span id=\\\"mes-contemplacao-opcao1\\\">[Mês de Contemplação]</span></p>\\n                    \\n                    <!--<p style=\\\"margin-top: 0px;margin-bottom: 2px; color: #e74c3c; font-size: 11px;\\\">(Apenas simulação, mês de contemplação não garantido)</p>-->\\n                    \\n                    <p><strong>Valor Crédito Entregue: R$</strong> <span id=\\\"valor-credito-entregue-opcao1\\\">[Valor Crédito Entregue]</span></p>\\n                    <p><strong>Valor Abatido Parcela: R$</strong> <span id=\\\"valor-abatido-parcela-opcao1\\\">[Valor Abatido Parcela]</span></p>\\n                    <p><strong>Prazo Atualizado:</strong> <span id=\\\"prazo-atualizado-opcao1\\\">[Prazo Atualizado]</span></p>\\n                    <p><strong>Parcela Atualizada: R$</strong> <span id=\\\"parcela-atualizada-com-seguro\\\">[Parcela Atualizada]</span></p>\\n                </div>\\n            </div>\\n            <div class=\\\"col-md-6\\\">\\n                <div class=\\\"secao\\\">\\n                    <h2>Opção 2: Abatimento do lance no prazo restante</h2>\\n                    <p><strong>Mês de Contemplação:</strong> <span id=\\\"mes-contemplacao-opcao2\\\">[Mês de Contemplação]</span></p>\\n                    \\n                    <!--<p style=\\\"margin-top: 0px;margin-bottom: 2px; color: #e74c3c; font-size: 11px;\\\">(Apenas simulação, mês de contemplação não garantido)</p>-->\\n                    \\n                    <p><strong>Valor Crédito Entregue: R$</strong> <span id=\\\"valor-credito-entregue-opcao2\\\">[Valor Crédito Entregue]</span></p>\\n                    <p><strong>Quantidade de Parcelas Abatidas no Prazo:</strong> <span id=\\\"quantidade-parcelas-abatidas-com-seguro\\\">[Quantidade de Parcelas Abatidas]</span></p>\\n                    <p><strong>Prazo Atualizado:</strong> <span id=\\\"prazo-atualizado-com-seguro\\\">[Prazo Atualizado]</span></p>\\n                    <p><strong>Parcela Atualizada: R$</strong> <span id=\\\"parcela-atualizada-opcao2-com-seguro\\\">[Parcela Atualizada]</span></p>\\n                </div>\\n            </div>\\n        </div>\\n\\n        <div class=\\\"secao\\\">\\n            <h2>Taxas</h2>\\n            <div class=\\\"row\\\">\\n                <div class=\\\"col-md-6\\\">\\n                    <p><strong>Taxa Administração Total:</strong> <span id=\\\"taxa-administracao\\\">[Taxa Administração Total]</span></p>\\n                    <p><strong>Taxa Administração Antecipada:</strong> <span id=\\\"taxa-antecipacao\\\">[Taxa Administração Antecipada]</span></p>\\n                    <p><strong>Fundo de Reserva:</strong> <span id=\\\"fundo-reserva\\\">[Fundo de Reserva]</span></p>\\n                    <p><strong>Taxa Efetivo Mensal:</strong> <span id=\\\"taxa-efetivo-mensal\\\">[Taxa Efetivo Mensal]</span></p>\\n                </div>\\n                <div class=\\\"col-md-6\\\">\\n                    <p><strong>Custo Efetivo Total: R$</strong> <span id=\\\"custo-efetivo-total\\\">[Custo Efetivo Total]</span></p>\\n                    <p><strong>Valor Seguro Mensal: R$</strong> <span id=\\\"valor-seguro-mensal\\\">[Valor Seguro Mensal]</span></p>\\n                    <!--<p><strong>Valor Seguro Total: R$</strong> <span id=\\\"valor-seguro-total\\\">[Valor Seguro Total]</span></p>-->\\n                    <p><strong>Seguro:</strong> <span id=\\\"seguro-vida\\\">[Seguro]</span></p>\\n                </div>\\n            </div>\\n        </div>\\n        \\n        <!-- Cópia Aqui -->\\n        <div class=\\\"row\\\">\\n            <div class=\\\"col-md-12\\\">\\n                <div class=\\\"secao\\\">\\n                    <h2>Dados da Proposta</h2>\\n                    <p><strong>Data e Hora da Proposta:</strong> <span id=\\\"datahora-proposta\\\">[Data e Hora da Proposta]</span></p>\\n                    <p><strong>Vencimento da Proposta:</strong> <span id=\\\"vencimento-proposta\\\">[Vencimento da Proposta]</span></p>\\n                </div>\\n            </div>\\n        </div>\\n    </div>    \\n</body>\\n</html>\\n\",\n    \"css\": \"body { font-family: Arial, sans-serif; width: 210mm; height: 297mm; margin: 0 auto; padding: 20px; background: transparent; } .proposta { width: 100%; max-width: 180mm; margin: 0 auto; padding: 20px; border-radius: 8px; } .secao h2 { font-size: 18px; color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 5px; margin-bottom: 15px; } .row { display: flex; justify-content: space-between; flex-wrap: wrap; } .col-md-6 { width: 48%; } .col-md-12 { width: 100%; } .text-left { text-align: left; } p { font-size: 14px; margin-bottom: 10px; } p strong { color: #333; } @page { size: A4; margin: 0; background: url('https://simulador.compreconsorcios.com.br/wp-content/uploads/2024/07/PROPOSTA_BG.png') no-repeat center center; background-size: cover !important; } .content-page { width: 210mm; height: 297mm; display: flex; justify-content: center; align-items: center; page-break-before: always; background: url('https://simulador.compreconsorcios.com.br/wp-content/uploads/2024/07/PROPOSTA_BG.png') no-repeat center center; background-size: cover !important; } .content-container { width: 180mm; padding: 20px; border-radius: 8px;}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        180,
+        -160
+      ],
+      "id": "4c762756-c31c-4571-ae4a-f0ff4ef3417a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7092772b-3150-4468-b518-f9cdf3361114",
+              "name": "url",
+              "value": "={{ $json[\"url\"].replace(\"http://localhost:3000\", \"http://host.docker.internal:3000\") }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        360,
+        -160
+      ],
+      "id": "6d420710-340e-4ec6-8e37-9bcecb9c389b",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        540,
+        -160
+      ],
+      "id": "3a344714-d800-4109-bd64-49fab344a7fa",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"nome_cliente\": \"Adriano\",\n  \"email_cliente\": \"Adriano@gmail.com\",\n  \"telefone_cliente\": \"11974124980\",\n  \"nome_vendedor\": \"Pedro\",\n  \"email_vendedor\": \"pedro@gmail.com\",\n  \"telefone_vendedor\": \"11996676330\",\n  \"bem_id\": 1,\n  \"plano_id\": 1,\n  \"valor_credito\": 100000,\n  \"prazo\": 1,\n  \"vencimento_proposta\": \"10/02/2025\",\n  \"lance_recurso_proprio\": 10000,\n  \"lance_terceiro\": 5000,\n  \"lance_embutido\": 15000,\n  \"mes_contemplacao\": \"5\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        -160
+      ],
+      "id": "a37fdaf9-df52-4984-8903-9e74d1cfe34f",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cvkkpgbuwatwykynnpxs.supabase.co/rest/v1/rpc/rpc_criar_simulacao",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "apikey",
+              "value": "=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2a2twZ2J1d2F0d3lreW5ucHhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcxMzUwNTksImV4cCI6MjAzMjcxMTA1OX0.kmB1Gljiy_qb0Iib9xfskWkAlIerdCMyAZUBXzP23Wo"
+            },
+            {
+              "name": "Authorization",
+              "value": "=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN2a2twZ2J1d2F0d3lreW5ucHhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcxMzUwNTksImV4cCI6MjAzMjcxMTA1OX0.kmB1Gljiy_qb0Iib9xfskWkAlIerdCMyAZUBXzP23Wo"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_nome_cliente\": \"Adriano\",\n  \"p_email_cliente\": \"Adriano@gmail.com\",\n  \"p_telefone_cliente\": \"11974124980\",\n  \"p_nome_vendedor\": \"Pedro\",\n  \"p_email_vendedor\": \"pedro@gmail.com\",\n  \"p_telefone_vendedor\": \"11996676330\",\n  \"p_bem_id\": 1,\n  \"p_plano_id\": 1,\n  \"p_valor_credito\": 100000,\n  \"p_prazo\": 100,\n  \"p_vencimento_proposta\": \"10/02/2025\",\n  \"p_lance_recurso_proprio\": 10000,\n  \"p_lance_terceiro\": 5000,\n  \"p_lance_embutido\": 15000,\n  \"p_mes_contemplacao\": \"5\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -60,
+        -160
+      ],
+      "id": "8636e629-f81d-4b75-beec-786f94e3fbd6",
+      "name": "HTTP Request2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "65f1ed3c-5868-484c-96f6-177393fa10d8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "900e0d1157f7b76b8ff88c10df838459dafee68f81623187cb6551e5f6f948fb"
+  },
+  "id": "iFPy0HR9WeZB25Ad",
+  "tags": []
+}
