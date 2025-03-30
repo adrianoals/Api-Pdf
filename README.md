@@ -1,4 +1,4 @@
----
+
 # 📄 Gerador de Propostas em PDF com Node.js + n8n
 
 Este projeto é uma API em **Node.js** com **Express** que gera arquivos PDF com layout customizado a partir de dados enviados via requisição HTTP. A API é integrada ao **n8n** para automatizar a criação de simulações e propostas comerciais.
@@ -145,11 +145,9 @@ Se for hospedar o servidor em produção, você deve:
 
 Adriano Lima Santos  
 
+
 ---
 
 ## 📄 Licença
 
 Este projeto está sob a licença MIT.
-
----
-
