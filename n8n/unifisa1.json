@@ -1,0 +1,1301 @@
+{
+  "name": "Unifisa",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"nome\": \"João\",\n  \"wa_id\": \"5511999999999\",\n  \"mensagem\": \"Olá, tudo bem?\",\n  \"base64\": \"string_em_base64\",\n  \"opcaoSelecionada\": \"01\"\n}\n"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -840,
+        40
+      ],
+      "id": "f33249b0-ad9e-4424-b70e-25746174659f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://apistart03.megaapi.com.br/rest/sendMessage/megastart-MF3FeLhcDsO/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=authorization",
+              "value": "=Bearer MF3FeLhcDsO"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messageData\": {\n    \"to\": \"+5511974124980\",\n    \"text\": \"*Simulador Unifisa*\\n\\n😊 Olá! 👋 Seja bem-vindo ao Simulador de Consórcios da Unifisa!\\n\\nAntes de começarmos, precisamos fazer um rápido cadastro. Mas fique tranquilo, ele será feito apenas uma vez. Nos próximos acessos, você não precisará repetir essas informações. 😉\\n\\nVamos começar com seu nome completo, que será usado nas propostas enviadas aos seus clientes.\\n\\n✍️ Digite seu nome como no exemplo:\\n\\n👉 *João Paulo Souza*\\n\\n_*🟢 Canal oficial do Simulador Unifisa*_\"\n  }\n}\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        680
+      ],
+      "id": "39079f7a-de2b-49cb-a804-78f4ebde9c35",
+      "name": "HTTP Request",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "vendedorid",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "wa_id",
+              "keyValue": "={{ $json.wa_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -580,
+        40
+      ],
+      "id": "f7574e11-f2f3-4ea6-93f2-c5482c901ccb",
+      "name": "Supabase",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "KzXEeULM5IXIAKEA",
+          "name": "Supabase account Unifisa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "72ad8ea5-e7dc-478e-a553-885c9a3c772e",
+              "name": "userExiste",
+              "value": "={{ $json?.wa_id ? true : false }}\n",
+              "type": "string"
+            },
+            {
+              "id": "bb78fa13-d5fc-4f09-a2dd-f03fbaf2992e",
+              "name": "mensagem",
+              "value": "={{ $('When Executed by Another Workflow').item.json.mensagem }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -340,
+        40
+      ],
+      "id": "148eefa2-1038-4570-8dcc-ae5b57533628",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6fc8cbce-e378-47b3-9834-81ca056f5b18",
+              "leftValue": "={{ $json.userExiste }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -80,
+        40
+      ],
+      "id": "f4068ec0-9be4-48a2-8c01-bb8e8d4b6ed9",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "tableId": "vendedorid",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "wa_id",
+              "fieldValue": "={{ $('Edit Fields').item.json.telefone }}"
+            },
+            {
+              "fieldId": "estado",
+              "fieldValue": "inicio1"
+            },
+            {
+              "fieldId": "criado_em",
+              "fieldValue": "={{ new Date().toLocaleString('sv-SE', { timeZone: 'America/Sao_Paulo' }).replace(' ', 'T') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        240,
+        680
+      ],
+      "id": "23c23c48-73d1-484d-9ee3-f091e869fd79",
+      "name": "Supabase1",
+      "retryOnFail": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "KzXEeULM5IXIAKEA",
+          "name": "Supabase account Unifisa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## CADASTRO INICIAL BANCO DE DADOS",
+        "height": 440,
+        "width": 660
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        560
+      ],
+      "id": "55584cff-1452-4342-aea9-61a038fa762e",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0d1a7713-d2f6-4940-bb75-bb4bf5568ad7",
+                    "leftValue": "={{ $json.estado }}",
+                    "rightValue": "inicio1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ConfirmarNome"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d88a10ea-9efd-4cf6-9b88-e3902283162c",
+                    "leftValue": "={{ $json.estado }}",
+                    "rightValue": "inicio2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ConfirmarEmail"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "091c311f-7d4c-4b2e-b5b2-d36945c5938b",
+                    "leftValue": "={{ $json.estado }}",
+                    "rightValue": "inicio3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ConfirmarTelefone"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "ignoreCase": true,
+          "renameFallbackOutput": "Outro"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        220,
+        -360
+      ],
+      "id": "8cd9a4d0-864b-4416-b62f-2fe5a1657933",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://apistart03.megaapi.com.br/rest/sendMessage/megastart-MF3FeLhcDsO/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=authorization",
+              "value": "=Bearer MF3FeLhcDsO"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messageData\": {\n    \"to\": \"{{ $json.wa_id }}\",\n    \"text\": \"*Simulador Unifisa*\\n\\n✅ Confirmação de Nome\\n\\nVocê digitou:\\n\\n👉 *{{ $json.mensagem }}*\\n\\nEsse será o nome usado nas propostas para seus clientes.\\n\\nSe estiver tudo certo, responda com:\\n\\n1️⃣ *Confirmar*\\n\\nSe quiser alterar, digite novamente seu nome completo.\\n\\n_*🟢 Canal oficial do Simulador Unifisa*_\"\n  }\n}\n\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        -1900
+      ],
+      "id": "843c27d6-ad52-4a05-ae0c-1e76ebb76086",
+      "name": "HTTP Request1",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9640a255-25b9-4018-8116-517f1e86a80e",
+              "leftValue": "={{ $json.mensagem }}",
+              "rightValue": "1",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        940,
+        -2100
+      ],
+      "id": "d2604b89-1979-4ba8-9702-adda5aea44b2",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "vendedorid",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "wa_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.wa_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "estado",
+              "fieldValue": "inicio2"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        -2200
+      ],
+      "id": "3d47b128-b0d0-420d-821f-14bd7a2f2962",
+      "name": "Supabase2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "KzXEeULM5IXIAKEA",
+          "name": "Supabase account Unifisa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "vendedorid",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "wa_id",
+              "condition": "eq",
+              "keyValue": "={{ $('If').item.json.wa_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "nome",
+              "fieldValue": "={{ $('Edit Fields- Confirmação de Nome').item.json.mensagem }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        -1900
+      ],
+      "id": "b67a089d-3769-4707-99f6-3c87de634482",
+      "name": "Supabase3",
+      "credentials": {
+        "supabaseApi": {
+          "id": "KzXEeULM5IXIAKEA",
+          "name": "Supabase account Unifisa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://apistart03.megaapi.com.br/rest/sendMessage/megastart-MF3FeLhcDsO/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=authorization",
+              "value": "=Bearer MF3FeLhcDsO"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messageData\": {\n    \"to\": \"+5511974124980\",\n    \"text\": \"*Simulador Unifisa*\\n\\n📧 Agora precisamos do seu e-mail para finalizar o cadastro.\\n\\nEsse e-mail será usado para o envio das propostas aos seus clientes.\\n\\n✍️ Digite seu e-mail como no exemplo:\\n\\n👉 *joao.souza@email.com*\\n\\n_*🟢 Canal oficial do Simulador Unifisa*_\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1400,
+        -2200
+      ],
+      "id": "4d406d3e-f62a-41aa-9847-0debab9c0b79",
+      "name": "HTTP Request2",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://apistart03.megaapi.com.br/rest/sendMessage/megastart-MF3FeLhcDsO/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=authorization",
+              "value": "=Bearer MF3FeLhcDsO"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messageData\": {\n    \"to\": \"{{ $json.wa_id }}\",\n    \"text\": \"*Simulador Unifisa*\\n\\n✅ Confirmação de Nome\\n\\nVocê digitou:\\n\\n👉 *{{ $json.mensagem }}*\\n\\nEsse será o seu e-mail usado nas propostas para seus clientes.\\n\\nSe estiver tudo certo, responda com:\\n\\n1️⃣ *Confirmar*\\n\\nSe quiser alterar, digite novamente seu e-mail.\\n\\n_*🟢 Canal oficial do Simulador Unifisa*_\"\n  }\n}\n\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1400,
+        -1340
+      ],
+      "id": "c60c675a-14e3-46c9-9d5f-48200d3b4aca",
+      "name": "HTTP Request3",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0353dc05-85bc-44cc-b250-c09409f6d63a",
+              "name": "wa_id",
+              "value": "={{ $json.wa_id }}",
+              "type": "string"
+            },
+            {
+              "id": "585af1c4-db31-4af6-bcf7-b4f9677e9bbe",
+              "name": "estado",
+              "value": "={{ $json.estado }}",
+              "type": "string"
+            },
+            {
+              "id": "c8b5cfc8-97d6-471e-ad22-21a8131f986f",
+              "name": "mensagem",
+              "value": "={{ $json.mensagem }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        -1340
+      ],
+      "id": "465e3ee3-b086-4897-b05f-b0b8dbeaa8c0",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9640a255-25b9-4018-8116-517f1e86a80e",
+              "leftValue": "={{ $json.mensagem }}",
+              "rightValue": "1",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1100,
+        -1540
+      ],
+      "id": "b2f252b0-9371-4f66-976f-55da05208fde",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "vendedorid",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "wa_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.wa_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "estado",
+              "fieldValue": "inicio3"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        -1640
+      ],
+      "id": "36fc0e89-f488-4412-994c-917597366d34",
+      "name": "Supabase4",
+      "credentials": {
+        "supabaseApi": {
+          "id": "KzXEeULM5IXIAKEA",
+          "name": "Supabase account Unifisa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "vendedorid",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "wa_id",
+              "condition": "eq",
+              "keyValue": "={{ $('If1').item.json.wa_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $('Edit Fields2').item.json.mensagem }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        -1340
+      ],
+      "id": "09368870-0232-4c8f-bcf2-8894f2387060",
+      "name": "Supabase5",
+      "credentials": {
+        "supabaseApi": {
+          "id": "KzXEeULM5IXIAKEA",
+          "name": "Supabase account Unifisa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://apistart03.megaapi.com.br/rest/sendMessage/megastart-MF3FeLhcDsO/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=authorization",
+              "value": "=Bearer MF3FeLhcDsO"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messageData\": {\n    \"to\": \"+5511974124980\",\n    \"text\": \"*Simulador Unifisa*\\n\\n📧 Agora precisamos do seu telefone para finalizar o cadastro.\\n\\nEsse telefone será usado para o envio das propostas aos seus clientes.\\n\\n✍️ Digite seu telefone como no exemplo:\\n\\n👉 *11998759876*\\n\\n_*🟢 Canal oficial do Simulador Unifisa*_\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1580,
+        -1640
+      ],
+      "id": "5244c6f9-6d07-41db-a25d-b9cbe7947287",
+      "name": "HTTP Request4",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://apistart03.megaapi.com.br/rest/sendMessage/megastart-MF3FeLhcDsO/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=authorization",
+              "value": "=Bearer MF3FeLhcDsO"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messageData\": {\n    \"to\": \"{{ $json.wa_id }}\",\n    \"text\": \"*Simulador Unifisa*\\n\\n✅ Confirmação de Nome\\n\\nVocê digitou:\\n\\n👉 *{{ $json.mensagem }}*\\n\\nEsse será o seu e-mail usado nas propostas para seus clientes.\\n\\nSe estiver tudo certo, responda com:\\n\\n1️⃣ *Confirmar*\\n\\nSe quiser alterar, digite novamente seu e-mail.\\n\\n_*🟢 Canal oficial do Simulador Unifisa*_\"\n  }\n}\n\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1400,
+        -800
+      ],
+      "id": "8bc50ee1-4d50-4d67-9a2d-8e7dae99869c",
+      "name": "HTTP Request5",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0353dc05-85bc-44cc-b250-c09409f6d63a",
+              "name": "wa_id",
+              "value": "={{ $json.wa_id }}",
+              "type": "string"
+            },
+            {
+              "id": "585af1c4-db31-4af6-bcf7-b4f9677e9bbe",
+              "name": "estado",
+              "value": "={{ $json.estado }}",
+              "type": "string"
+            },
+            {
+              "id": "c8b5cfc8-97d6-471e-ad22-21a8131f986f",
+              "name": "mensagem",
+              "value": "={{ $json.mensagem }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        -800
+      ],
+      "id": "27af81cb-04af-4174-951a-7b35e7c379df",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9640a255-25b9-4018-8116-517f1e86a80e",
+              "leftValue": "={{ $json.mensagem }}",
+              "rightValue": "1",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1100,
+        -1000
+      ],
+      "id": "85c846a2-06db-4a73-b330-5fb525d00957",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "vendedorid",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "wa_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.wa_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "estado",
+              "fieldValue": "simulador"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        -1100
+      ],
+      "id": "67e69c28-f2fe-4ffb-aa36-a1965d81ff0b",
+      "name": "Supabase6",
+      "credentials": {
+        "supabaseApi": {
+          "id": "KzXEeULM5IXIAKEA",
+          "name": "Supabase account Unifisa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "vendedorid",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "wa_id",
+              "condition": "eq",
+              "keyValue": "={{ $('If3').item.json.wa_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $('Edit Fields3').item.json.mensagem }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        -800
+      ],
+      "id": "731a49cd-e7b6-49d7-8baf-04edecaab32d",
+      "name": "Supabase7",
+      "credentials": {
+        "supabaseApi": {
+          "id": "KzXEeULM5IXIAKEA",
+          "name": "Supabase account Unifisa"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://apistart03.megaapi.com.br/rest/sendMessage/megastart-MF3FeLhcDsO/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=authorization",
+              "value": "=Bearer MF3FeLhcDsO"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messageData\": {\n    \"to\": \"+5511974124980\",\n    \"text\": \"*Simulador Unifisa*\\n\\n📧 Agora pode solicitar sua simulação de consórcios\\n\\n_*🟢 Canal oficial do Simulador Unifisa*_\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1580,
+        -1100
+      ],
+      "id": "18a3b8c8-e1b2-4070-bee6-bc19b68f7179",
+      "name": "HTTP Request6",
+      "alwaysOutputData": true,
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0353dc05-85bc-44cc-b250-c09409f6d63a",
+              "name": "wa_id",
+              "value": "={{ $json.wa_id }}",
+              "type": "string"
+            },
+            {
+              "id": "585af1c4-db31-4af6-bcf7-b4f9677e9bbe",
+              "name": "estado",
+              "value": "={{ $json.estado }}",
+              "type": "string"
+            },
+            {
+              "id": "c8b5cfc8-97d6-471e-ad22-21a8131f986f",
+              "name": "mensagem",
+              "value": "={{ $json.mensagem }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        740,
+        -1900
+      ],
+      "id": "bfe1ecfb-a62e-44d4-84f8-62abbf62342b",
+      "name": "Edit Fields- Confirmação de Nome"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "KKUZW7vUAotWkkXd",
+          "mode": "list",
+          "cachedResultName": "Unifisa - IA Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "wa_id": "={{ $json.wa_id }}",
+            "nome": "={{ $json.nome }}",
+            "email": "={{ $json.email }}",
+            "estado": "={{ $json.estado }}",
+            "criado_em": "={{ $json.criado_em }}",
+            "telefone": "={{ $json.telefone }}",
+            "userExiste": "={{ $json.userExiste }}",
+            "mensagem": "={{ $json.mensagem }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "wa_id",
+              "displayName": "wa_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "nome",
+              "displayName": "nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "criado_em",
+              "displayName": "criado_em",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "userExiste",
+              "displayName": "userExiste",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "mensagem",
+              "displayName": "mensagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        440,
+        -140
+      ],
+      "id": "bf2aad28-0160-440b-ad36-d3e542893ecd",
+      "name": "Execute Workflow"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "nome": null,
+          "wa_id": "+5511974124980",
+          "mensagem": "1",
+          "base64": null,
+          "opcaoSelecionada": null
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields- Confirmação de Nome",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Supabase2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Supabase3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Supabase5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Supabase4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "Supabase7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Supabase6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase6": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields- Confirmação de Nome": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "48aed123-b115-4b83-aead-f886f3c759a9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "abe16e9b5734de5c72bdbe103db9f1d4a5c95fca91daaa094d8ae1af96f677a7"
+  },
+  "id": "wWA9Z4d9Ro61u0nW",
+  "tags": []
+}
