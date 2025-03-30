@@ -144,7 +144,6 @@ Se for hospedar o servidor em produção, você deve:
 ## 👤 Autor
 
 Adriano Lima Santos  
-[Seu LinkedIn ou GitHub]
 
 ---
 
@@ -152,7 +151,5 @@ Adriano Lima Santos
 
 Este projeto está sob a licença MIT.
 
-```
 ---
 
-Se quiser, posso gerar esse `README.md` como arquivo real para você baixar ou adicionar ele ao seu projeto. Deseja isso?
