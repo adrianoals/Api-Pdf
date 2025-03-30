@@ -1,0 +1,238 @@
+{
+  "name": "Unifisa 2",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -380,
+        120
+      ],
+      "id": "b28382e3-eadc-4b33-b4bc-6146fbfc2af3",
+      "name": "When chat message received",
+      "webhookId": "843bff78-372b-4d30-b4d4-73802f3495e1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Olá! Eu sou o vendedor {{ $json.nome }} — meu telefone é {{ $json.celular }} e meu e-mail é {{ $json.email }}. Estou iniciando a criação de uma nova simulação de consórcio e preciso da sua ajuda para confirmar os dados do cliente. Por favor, colete **todos os dados listados abaixo de uma só vez**, de forma clara e organizada, para que possamos gerar a proposta rapidamente.\n\n<instruções>\nA seguir, você encontrará todas as instruções necessárias para realizar seu trabalho como assistente virtual de um vendedor de consórcios. Seu papel é guiar o vendedor na coleta e confirmação dos dados do cliente para gerar uma simulação de consórcio personalizada. Cada seção foi cuidadosamente estruturada para te ajudar a conduzir essa conversa de forma eficiente e natural.\n</instruções>\n\n<objetivo>\nSolicitar todos os dados necessários ao vendedor, de uma só vez, para gerar a simulação de consórcio. Ao final da conversa, você deverá encaminhar os dados para o próximo passo no fluxo, que será a criação e geração da proposta em PDF.\n</objetivo>\n\n<persona>\nVocê é um(a) assistente virtual inteligente, simpático(a) e eficiente. Seu tom é leve, profissional e colaborativo. Você fala como um(a) colega de trabalho prestativo(a), sempre buscando ajudar o vendedor a concluir rapidamente a tarefa. Evite linguagem muito técnica, fale de forma natural e humana.\n</persona>\n\n<passos>\n1. Cumprimente o vendedor usando o nome dele.\n2. Diga que ele pode informar todos os dados do cliente em uma única mensagem.\n3. Liste claramente os campos que precisam ser preenchidos.\n4. Assim que ele responder, revise e confirme com ele se está tudo certo.\n5. Finalize informando que você está enviando os dados para gerar a proposta.\n</passos>\n\n<mensagem inicial>\nOlá {{ $json.nome }}, tudo bem? 😄  \nVamos agilizar a criação da proposta. Por favor, me envie **todos os dados abaixo de uma vez só**, organizados como preferir:\n\n📌 Nome completo do cliente  \n📧 E-mail do cliente  \n📞 Telefone do cliente  \n🚗 Tipo de bem (ex: Imóvel, Automóvel, Moto)  \n📊 Plano (ex: 25%, 30%, 50%)  \n💰 Valor do crédito desejado (em R$)  \n📆 Prazo (em meses)  \n🎯 Valor do lance com recurso próprio (R$)  \n🤝 Valor do lance com terceiro (R$)  \n📥 Valor do lance embutido (R$)  \n📅 Mês de contemplação (opcional)  \n⏳ Data de vencimento da proposta (ex: 10/02/2025)\n\nAssim que me enviar, eu vou confirmar tudo com você, tá bom? 😊\n</mensagem inicial>\n\n<restrições>\n1. Nunca avance sem confirmar os dados.\n2. Nunca invente ou preencha campos automaticamente.\n3. Seja sempre educado e direto.\n4. Mantenha a conversa fluida e produtiva.\n</restrições>\n\n<dados>\nCampos obrigatórios:\n- nome_cliente\n- email_cliente\n- telefone_cliente\n- bem_id\n- plano_id\n- valor_credito\n- prazo\n- vencimento_proposta\n- lance_recurso_proprio\n- lance_terceiro\n- lance_embutido\n\nCampos opcionais:\n- mes_contemplacao\n</dados>\n\n<contexto>\nVocê está atuando como assistente virtual dentro do n8n. O vendedor já foi identificado previamente e está interagindo para gerar uma simulação de consórcio personalizada para seu cliente. Sua função é garantir que todos os dados estejam completos e corretos antes de seguir para a geração da proposta.\n</contexto>\n\nUse a ferramenta \"formatar_dados_simulacao\" para extrair e organizar os dados do cliente com base na resposta recebida.\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        120,
+        -40
+      ],
+      "id": "efbf870e-9512-49d6-9312-879b8b680c99",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        20,
+        240
+      ],
+      "id": "9208153d-e06d-4bdc-865d-8d1488bacbe5",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "BmtBebmB1PEMVZN9",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "660643c5-0f5c-4002-8d60-e490b413ae28",
+              "name": "mensagem",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "041bc22b-99f3-4e4d-9e76-c5ce328aae95",
+              "name": "nome",
+              "value": "Adriano Lima",
+              "type": "string"
+            },
+            {
+              "id": "6ee1b83c-5f41-42cd-bb8a-09c6eb720c46",
+              "name": "celular",
+              "value": "11974124980",
+              "type": "string"
+            },
+            {
+              "id": "7236b12c-9fbc-4290-b5c1-176f78ad1601",
+              "name": "email",
+              "value": "adriano@unifisa.com.br",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -360,
+        -140
+      ],
+      "id": "cdcde5fd-2dca-4e74-859b-0400b51f5c1d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        -100,
+        -40
+      ],
+      "id": "a9f5af51-5db0-4c14-bdb1-82ede83c0a11",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "11235hlk"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        200,
+        180
+      ],
+      "id": "aff4439c-89f1-454b-b0e8-f7453b07ec93",
+      "name": "Window Buffer Memory"
+    },
+    {
+      "parameters": {
+        "name": "formatar_dados_simulacao",
+        "description": "=Extrai os dados do cliente de uma mensagem em texto livre e retorna um JSON formatado para gerar a simulação.\n",
+        "jsCode": "const texto = query.texto_livre.replace(/\\n/g, ' ').trim().toLowerCase();\n\nconst dados = {\n  nome_cliente: '',\n  email_cliente: '',\n  telefone_cliente: '',\n  bem: '',\n  plano: '',\n  valor_credito: '',\n  prazo: '',\n  lance_recurso_proprio: '',\n  lance_terceiro: '',\n  lance_embutido: '',\n  mes_contemplacao: '',\n  vencimento_proposta: ''\n};\n\nconst emailMatch = texto.match(/[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}/);\nif (emailMatch) dados.email_cliente = emailMatch[0];\n\nconst telefoneMatch = texto.match(/\\b\\d{10,11}\\b/);\nif (telefoneMatch) dados.telefone_cliente = telefoneMatch[0];\n\nconst valorMatch = texto.match(/(\\d{1,3}(\\.\\d{3})*,\\d{2})|(\\d+(?:[.,]\\d+)?)/g);\nif (valorMatch) {\n  dados.valor_credito = valorMatch[0] || '';\n  dados.prazo = valorMatch[1] || '';\n  dados.lance_recurso_proprio = valorMatch[2] || '0';\n  dados.lance_terceiro = valorMatch[3] || '0';\n  dados.lance_embutido = valorMatch[4] || '0';\n  dados.mes_contemplacao = valorMatch[5] || '';\n}\n\nconst vencimentoMatch = texto.match(/\\b(\\d{2}\\/\\d{2}\\/\\d{4})\\b/);\nif (vencimentoMatch) dados.vencimento_proposta = vencimentoMatch[0];\n\nconst partes = texto.split(/\\s+/);\ndados.nome_cliente = partes.slice(0, 2).join(' ');\n\nconst bens = ['imóvel', 'imovel', 'automóvel', 'automovel', 'moto'];\ndados.bem = bens.find(b => texto.includes(b)) || 'não identificado';\n\nconst planos = ['25%', '30%', '50%', 'alpha', 'plus'];\ndados.plano = planos.find(p => texto.includes(p)) || 'não identificado';\n\nreturn JSON.stringify(dados);\n",
+        "specifyInputSchema": true,
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"texto_livre\": {\n      \"type\": \"string\",\n      \"description\": \"Mensagem com os dados do cliente\"\n    }\n  },\n  \"required\": [\"texto_livre\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.1,
+      "position": [
+        360,
+        180
+      ],
+      "id": "cc583c51-6586-4448-819e-9009ec0602de",
+      "name": "Code Tool"
+    }
+  ],
+  "pinData": {
+    "Edit Fields": [
+      {
+        "json": {
+          "mensagem": "",
+          "nome": "Adriano Lima",
+          "celular": "11974124980",
+          "email": "adriano@unifisa.com.br"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "61535d28-8a4a-44a9-a9e2-4d04cdc867ac",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "900e0d1157f7b76b8ff88c10df838459dafee68f81623187cb6551e5f6f948fb"
+  },
+  "id": "5x5lyBoUvgzMA6QM",
+  "tags": []
+}
